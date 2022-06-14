@@ -1,1 +1,1 @@
-# Iris-Dataset-for-Unsupervised-Learning-R
+# Iris-Dataset-for-Supervised-Learning-R
