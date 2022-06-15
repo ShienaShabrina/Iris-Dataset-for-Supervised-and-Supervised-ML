@@ -1,9 +1,4 @@
 ---
-title: "PCA and K Means Homework"
-output: html_document
-editor_options: 
-  markdown: 
-    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -19,46 +14,31 @@ library(factoextra)
 
 Dataset: Iris Task:
 
-Lakukan PCA sehingga mereduksi data Iris menjadi 2 kolom saja kemudian,
-lakukan K-Means Clustering dari data Iris yang telah berhasil direduksi.
-Setelah itu, jawablah 3 soal di bawah ini:
-
-Soal: a. Berapa nilai eigenvalue 1 dan eigenvalue 2 dari dataset Iris?
-b. Berapa informasi yang masih bisa 'dijelaskan' oleh data yang telah
-direduksi? b. Cari nilai 'k' yang optimal berdasarkan Elbow dan
-Silhouette method. Apakah nilai k = 3 masih merupakan nilai 'k' yang
-terbaik?
-
-Kumpulkan dalam R Markdown saja (.RMD) dan jangan format lain.
-
-## Tempat Ngoding
-
 ```{r}
 # Import data iris
 data(iris)
 
-# Hilangkan kolom 'label' bunga sehingga data 'terkesan' seperti unlabeled
+# Remove 'label' so that will impress as unlabeled
 df <- cbind(iris$Sepal.Length, iris$Sepal.Width, iris$Petal.Length, iris$Petal.Width)
 ```
 
 ```{r}
-# Buatlah PCA dari df
+# Load PCA from df
 pca_iris = prcomp(df, center = TRUE, scale = TRUE) 
 ```
 
 ```{r}
-# Lihat summary model PCA untuk menentukan eigenvalue 1 dan 2
+# See summary model PCA to figured out eigenvalue 1 and 2
 summary(pca_iris)
-# Terus, buat dapetin eigenvalue 1 dan 2 ngapain? Silakan dilanjutkan di bawah
 ```
 
 ```{r}
-# mencari eigenvalue 1 dan 2
+# load for eigenvalue 1 dan 2
 pca_iris$sdev^2
 ```
 
-```{r}
-# mencari eigenvector
+```{r} 
+# load for eigenvector
 pca_iris$rotation
 ```
 
@@ -67,39 +47,34 @@ pca_iris$x
 ```
 
 ```{r}
-# Reduksilah data iris menjadi 2 kolom saja
+# reduce iris data so will have two columns only
 iris_transform = as.data.frame(-pca_iris$x[,1:2])
 iris_transform
 ```
 
 ```{r}
-# Kemudian, lakukan evaluasi k-means terhadap iris_transform
+# Evaluate k-means towards iris_transform
 fviz_nbclust(iris_transform, kmeans, method = 'wss')
 fviz_nbclust(iris_transform, kmeans, method = 'silhouette')
 ```
 
 ```{r}
-# Pilihlah nomor k yang menurut anda paling optimal
+# The best K
 k = 2
   
-# Visualisasikan k-means clustering pada data Iris yang telah tereduksi
+# Visualize k-means clustering on the reduced Iris data
 kmeans_iris = kmeans(iris_transform, centers = k, nstart = 50)
 fviz_cluster(kmeans_iris, data = iris_transform)
 ```
 
-## Tuliskan Jawaban dari soal A B C di sini:
+## Insight 
 
-Jawaban:
 
-a\. Nilai eigenvalue 1 dan 2 dari dataset Iris adalah : 2.918 dan 0.914
+a\. Eigenvalues 1 and 2 of the Iris dataset are: 2.918 and 0.914
 
-b\. informasi yang masih bisa 'dijelaskan' oleh data yang telah
-direduksi
+b\. Based on the summary, it can be seen that 95.81% of the information
+contained in the data can be extracted with only 2 Principal
+Components. From 4 columns of data, it is reduced to only 2 columns. Size
+reduced by 50%, but the information contained only decreased by 4.19%
 
-Berdasarkan summary, terlihat bahwa 95,81% dari informasi yang
-terkandung dalam data dapat diekstrak hanya dengan 2 Principal
-Component. Dari data 4 kolom, direduksi jadi 2 kolom saja. Ukuran
-berkurang 50%, tapi informasi yang terkandung hanya berkurang 4.19%
-
-c\. nilai 'k' yang optimal berdasarkan Elbow dan Silhouette method,
-adalah nilai k = 2
+c\. The optimal 'k' value based on the Elbow and Silhouette method is k = 2
